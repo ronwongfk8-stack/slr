@@ -26,8 +26,8 @@ export const initialSiteConfig: SiteConfig = {
   servicesVideoTitle: 'Specialized Corporate Consultancy & Media Production Overview',
   servicesVideoDuration: '1:45',
   servicesVideoBadge: 'Consultancy & Production Reel (1:45)',
-  intro916VideoUrl: '/videos/ugc_creator_reel_9_16.mp4',
-  intro916VideoPoster: '/src/assets/images/showcase_ugc_creator_1790504084326.jpg',
+  intro916VideoUrl: '/videos/video_editing_perfume.mp4',
+  intro916VideoPoster: '',
   intro916VideoTitle: 'High-Impact 9:16 Intro Reel',
   intro916VideoBadge: '9:16 Mobile-First (Auto-Play)',
 };

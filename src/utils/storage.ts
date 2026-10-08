@@ -76,7 +76,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
         return liveUrl;
       }
     } catch {}
-    return '/videos/ugc_creator_reel_9_16.mp4';
+    return '/videos/video_editing_perfume.mp4';
   }
 
   // 5. Services Video resolution
@@ -182,7 +182,9 @@ export function getSavedSiteConfig(): SiteConfig {
         heroVideoDuration: parsed.heroVideoDuration !== undefined ? parsed.heroVideoDuration : initialSiteConfig.heroVideoDuration,
         heroVideoBadge: parsed.heroVideoBadge !== undefined ? parsed.heroVideoBadge : initialSiteConfig.heroVideoBadge,
         intro916VideoUrl: validIntro916VideoUrl,
-        intro916VideoPoster: parsed.intro916VideoPoster !== undefined ? parsed.intro916VideoPoster : initialSiteConfig.intro916VideoPoster,
+        intro916VideoPoster: parsed.intro916VideoPoster === '/src/assets/images/showcase_ugc_creator_1790504084326.jpg'
+          ? initialSiteConfig.intro916VideoPoster // old placeholder picture: use the video's own first frame
+          : (parsed.intro916VideoPoster !== undefined ? parsed.intro916VideoPoster : initialSiteConfig.intro916VideoPoster),
         intro916VideoTitle: parsed.intro916VideoTitle !== undefined ? parsed.intro916VideoTitle : initialSiteConfig.intro916VideoTitle,
         intro916VideoBadge: parsed.intro916VideoBadge !== undefined ? parsed.intro916VideoBadge : initialSiteConfig.intro916VideoBadge,
         servicesVideoUrl: validServicesVideoUrl,

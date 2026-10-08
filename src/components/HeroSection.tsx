@@ -29,7 +29,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (siteConfig.intro916VideoUrl && !siteConfig.intro916VideoUrl.startsWith('indexeddb:') && !siteConfig.intro916VideoUrl.includes('commondatastorage')) {
       return siteConfig.intro916VideoUrl;
     }
-    return '/videos/ugc_creator_reel_9_16.mp4';
+    return '/videos/video_editing_perfume.mp4';
   });
 
   // State to track playback sequence
@@ -230,7 +230,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <video
                   ref={video916Ref}
                   src={live916VideoSrc}
-                  poster={siteConfig.intro916VideoPoster || '/src/assets/images/showcase_ugc_creator_1790504084326.jpg'}
+                  poster={siteConfig.intro916VideoPoster || undefined}
                   autoPlay
                   playsInline
                   crossOrigin="anonymous"
