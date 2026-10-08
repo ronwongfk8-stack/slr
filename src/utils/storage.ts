@@ -175,7 +175,9 @@ export function getSavedSiteConfig(): SiteConfig {
         ...parsed,
         email: parsed.email || 'sapotlokal.co@gmail.com',
         heroVideoUrl: validHeroVideoUrl,
-        heroVideoPoster: parsed.heroVideoPoster !== undefined ? parsed.heroVideoPoster : initialSiteConfig.heroVideoPoster,
+        heroVideoPoster: parsed.heroVideoPoster === '/src/assets/images/hero_sapotlokal_agency_1790504057787.jpg'
+          ? initialSiteConfig.heroVideoPoster // old stock office picture: show the video's own first frame instead
+          : (parsed.heroVideoPoster !== undefined ? parsed.heroVideoPoster : initialSiteConfig.heroVideoPoster),
         heroVideoTitle: parsed.heroVideoTitle !== undefined ? parsed.heroVideoTitle : initialSiteConfig.heroVideoTitle,
         heroVideoDuration: parsed.heroVideoDuration !== undefined ? parsed.heroVideoDuration : initialSiteConfig.heroVideoDuration,
         heroVideoBadge: parsed.heroVideoBadge !== undefined ? parsed.heroVideoBadge : initialSiteConfig.heroVideoBadge,

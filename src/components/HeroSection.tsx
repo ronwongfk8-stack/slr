@@ -258,8 +258,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <video
                   ref={enterpriseVideoRef}
                   key={`enterprise-${liveHeroVideoSrc}`}
-                  src={liveHeroVideoSrc}
-                  poster={siteConfig.heroVideoPoster || '/src/assets/images/hero_sapotlokal_agency_1790504057787.jpg'}
+                  src={liveHeroVideoSrc.startsWith('blob:') || liveHeroVideoSrc.includes('#') ? liveHeroVideoSrc : `${liveHeroVideoSrc}#t=0.1`}
+                  poster={siteConfig.heroVideoPoster || undefined}
+                  preload="auto"
                   controls
                   playsInline
                   crossOrigin="anonymous"

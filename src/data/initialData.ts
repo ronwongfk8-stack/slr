@@ -17,7 +17,7 @@ export const initialSiteConfig: SiteConfig = {
   clientSatisfaction: 99,
   mediaViewsGenerated: '18M+',
   heroVideoUrl: '/videos/hero_talking_head.mp4',
-  heroVideoPoster: '/src/assets/images/hero_sapotlokal_agency_1790504057787.jpg',
+  heroVideoPoster: '',
   heroVideoTitle: 'Corporate Growth Advisory & Strategic Overview',
   heroVideoDuration: '1:30',
   heroVideoBadge: 'Corporate Growth Advisory Reel (1:30)',
