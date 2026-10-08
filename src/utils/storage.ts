@@ -17,10 +17,13 @@ const REPORTS_KEY = 'sapotlokal_client_reports';
 const DATA_VERSION_KEY = 'sapotlokal_data_version';
 const CURRENT_DATA_VERSION = 'v13_teepro_showcase_and_larger_ugc';
 
-// Old placeholder sample videos that earlier versions saved into the browser.
-// If a returning visitor still has one saved, swap it for the real default video.
-const isOldSampleVideoUrl = (url?: string): boolean =>
+// Default videos shipped with the site (/videos/...) and old placeholder sample videos
+// get saved into a visitor's browser. When we change the default video for a slot, a
+// returning visitor would otherwise keep seeing the old one, so these are replaced with
+// the current default. Videos uploaded in the admin panel (indexeddb:/blob:) are not touched.
+const isReplaceableDefaultVideoUrl = (url?: string): boolean =>
   !!url && (
+    url.startsWith('/videos/') ||
     url.includes('bower-media-samples') ||
     url.includes('themarcosdev') ||
     url.includes('mediaelement-files') ||
@@ -60,7 +63,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
         return liveUrl;
       }
     } catch {}
-    return '/videos/hero_overview.mp4';
+    return '/videos/hero_talking_head.mp4';
   }
 
   // 4. Intro 9:16 Video resolution
@@ -86,7 +89,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
         return liveUrl;
       }
     } catch {}
-    return '/videos/corporate_consultancy_16_9.mp4';
+    return '/videos/services_overview.mp4';
   }
 
   // 6. Query IndexedDB for custom uploaded video by itemId
@@ -140,7 +143,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
 
   // 10. Guaranteed reliable direct CORS-enabled HTTPS fallback stream
   return itemId === 'proj-4' || currentUrl?.includes('916') || currentUrl?.includes('ugc')
-    ? '/videos/ugc_growth_9x16.mp4'
+    ? '/videos/ugc_petshop.mp4'
     : itemId === 'proj-6'
       ? '/videos/brand_strategy.mp4'
       : '/videos/commercial_4k_reel_16_9.mp4';
@@ -153,17 +156,17 @@ export function getSavedSiteConfig(): SiteConfig {
       const parsed = JSON.parse(raw);
       // If heroVideoUrl is an internal marker or expired blob URL, use default during synchronous initial render
       let validHeroVideoUrl = parsed.heroVideoUrl;
-      if (!validHeroVideoUrl || validHeroVideoUrl.startsWith('indexeddb:') || validHeroVideoUrl.startsWith('blob:') || isOldSampleVideoUrl(validHeroVideoUrl)) {
+      if (!validHeroVideoUrl || validHeroVideoUrl.startsWith('indexeddb:') || validHeroVideoUrl.startsWith('blob:') || isReplaceableDefaultVideoUrl(validHeroVideoUrl)) {
         validHeroVideoUrl = initialSiteConfig.heroVideoUrl;
       }
 
       let validServicesVideoUrl = parsed.servicesVideoUrl;
-      if (!validServicesVideoUrl || validServicesVideoUrl.startsWith('indexeddb:') || validServicesVideoUrl.startsWith('blob:') || isOldSampleVideoUrl(validServicesVideoUrl)) {
+      if (!validServicesVideoUrl || validServicesVideoUrl.startsWith('indexeddb:') || validServicesVideoUrl.startsWith('blob:') || isReplaceableDefaultVideoUrl(validServicesVideoUrl)) {
         validServicesVideoUrl = initialSiteConfig.servicesVideoUrl;
       }
 
       let validIntro916VideoUrl = parsed.intro916VideoUrl;
-      if (!validIntro916VideoUrl || validIntro916VideoUrl.startsWith('indexeddb:') || validIntro916VideoUrl.startsWith('blob:') || isOldSampleVideoUrl(validIntro916VideoUrl)) {
+      if (!validIntro916VideoUrl || validIntro916VideoUrl.startsWith('indexeddb:') || validIntro916VideoUrl.startsWith('blob:') || isReplaceableDefaultVideoUrl(validIntro916VideoUrl)) {
         validIntro916VideoUrl = initialSiteConfig.intro916VideoUrl;
       }
 
@@ -411,8 +414,10 @@ export function getSavedPortfolio(): PortfolioItem[] {
           : (item.imageUrl ? [item.imageUrl] : (initialMatch?.images || []));
 
         let currentVideo: string | undefined = item.videoUrl || item.mediaUrl;
-        if (isOldSampleVideoUrl(currentVideo) && initialMatch?.videoUrl) {
+        let usingCurrentDefault = false;
+        if (isReplaceableDefaultVideoUrl(currentVideo) && initialMatch?.videoUrl) {
           currentVideo = initialMatch.videoUrl;
+          usingCurrentDefault = true;
         }
         if (currentVideo?.startsWith('indexeddb:')) {
           if (activeVideoBlobUrls.has(item.id)) {
@@ -430,6 +435,7 @@ export function getSavedPortfolio(): PortfolioItem[] {
           category: item.category ?? initialMatch?.category ?? 'Video Editing',
           mediaType: resolvedMediaType,
           websiteUrl: item.websiteUrl || initialMatch?.websiteUrl || (item.category === 'Website Building' ? item.mediaUrl : undefined),
+          mediaUrl: usingCurrentDefault && initialMatch ? initialMatch.mediaUrl : item.mediaUrl,
           videoUrl: resolvedMediaType === 'video'
             ? (currentVideo || initialMatch?.videoUrl || (item.category === 'UGC' || item.aspectRatio === '9:16'
                 ? '/videos/ugc_growth_9x16.mp4'
@@ -437,7 +443,7 @@ export function getSavedPortfolio(): PortfolioItem[] {
             : undefined,
           imageUrl: item.imageUrl || item.posterUrl || (resolvedMediaType === 'image' ? item.mediaUrl : initialMatch?.imageUrl),
           images: resolvedImages,
-          aspectRatio: item.aspectRatio || initialMatch?.aspectRatio || (item.category === 'UGC' ? '9:16' : '16:9'),
+          aspectRatio: (usingCurrentDefault && initialMatch?.aspectRatio) || item.aspectRatio || initialMatch?.aspectRatio || (item.category === 'UGC' ? '9:16' : '16:9'),
         };
       });
     }

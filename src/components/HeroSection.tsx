@@ -22,7 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (siteConfig.heroVideoUrl && !siteConfig.heroVideoUrl.startsWith('indexeddb:') && !siteConfig.heroVideoUrl.includes('commondatastorage')) {
       return siteConfig.heroVideoUrl;
     }
-    return '/videos/hero_overview.mp4';
+    return '/videos/hero_talking_head.mp4';
   });
 
   const [live916VideoSrc, setLive916VideoSrc] = useState<string>(() => {

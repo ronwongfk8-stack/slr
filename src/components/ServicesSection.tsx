@@ -3,7 +3,7 @@ import { Play, X } from 'lucide-react';
 import { SiteConfig } from '../types';
 import { resolveLiveVideoUrl } from '../utils/storage';
 
-export const FALLBACK_SERVICES_VIDEO = '/videos/corporate_consultancy_16_9.mp4';
+export const FALLBACK_SERVICES_VIDEO = '/videos/services_overview.mp4';
 
 interface ServicesSectionProps {
   siteConfig: SiteConfig;

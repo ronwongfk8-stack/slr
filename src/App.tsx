@@ -155,7 +155,7 @@ export default function App() {
     const heroPoster = siteConfig.heroVideoPoster?.trim() || undefined;
     const heroVideoUrl = siteConfig.heroVideoUrl && !siteConfig.heroVideoUrl.includes('commondatastorage')
       ? siteConfig.heroVideoUrl
-      : '/videos/hero_overview.mp4';
+      : '/videos/hero_talking_head.mp4';
     const heroItem: PortfolioItem = {
       id: 'hero-overview-video',
       title: siteConfig.heroVideoTitle || 'Sapotlokal Overview & Strategic Advisory Showreel',
