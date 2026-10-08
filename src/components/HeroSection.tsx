@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowRight, Play, MapPin, QrCode, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, Play, MapPin, QrCode, Mail, Sparkles, Volume2 } from 'lucide-react';
 import { SiteConfig } from '../types';
 import { resolveLiveVideoUrl } from '../utils/storage';
 
@@ -39,6 +39,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   // Audio controls: audio on automatically by default
   const [isMuted916, setIsMuted916] = useState(false);
+  // True when the browser blocked sound on the auto-played talking-head video
+  const [isMutedEnterprise, setIsMutedEnterprise] = useState(false);
 
   const video916Ref = useRef<HTMLVideoElement>(null);
   const enterpriseVideoRef = useRef<HTMLVideoElement>(null);
@@ -107,6 +109,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   }, [live916VideoSrc]);
 
+  // While the talking head is muted by the browser, the first click / tap / key press anywhere turns sound on
+  useEffect(() => {
+    if (!isMutedEnterprise) return;
+    const unmute = () => {
+      if (enterpriseVideoRef.current) enterpriseVideoRef.current.muted = false;
+      setIsMutedEnterprise(false);
+    };
+    window.addEventListener('click', unmute, { once: true });
+    window.addEventListener('touchstart', unmute, { once: true });
+    window.addEventListener('keydown', unmute, { once: true });
+    return () => {
+      window.removeEventListener('click', unmute);
+      window.removeEventListener('touchstart', unmute);
+      window.removeEventListener('keydown', unmute);
+    };
+  }, [isMutedEnterprise]);
+
   // When 9:16 video finishes, auto-play the Enterprise Growth Advisory video!
   const handle916Ended = () => {
     setHas916Finished(true);
@@ -119,7 +138,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         .catch((err) => {
           console.warn('Enterprise video autoplay fallback:', err);
           if (enterpriseVideoRef.current) {
+            // Browser blocked sound (no click/tap yet): play muted and offer a "Tap for sound" button
             enterpriseVideoRef.current.muted = true;
+            setIsMutedEnterprise(true);
             enterpriseVideoRef.current.play().catch(console.warn);
           }
         });
@@ -249,6 +270,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     }
                   }}
                 />
+                {isMuted916 && isPlaying916 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (video916Ref.current) video916Ref.current.muted = false;
+                      setIsMuted916(false);
+                    }}
+                    className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/25 bg-black/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-black/90"
+                  >
+                    <Volume2 className="h-3.5 w-3.5" /> Tap for sound
+                  </button>
+                )}
               </div>
 
               {/* 2. Enterprise Growth Advisory Video (16:9 player placed directly below intro video) */}
@@ -272,10 +306,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     }
                   }}
                   onPause={() => setIsPlayingEnterprise(false)}
+                  onVolumeChange={(e) => {
+                    if (!e.currentTarget.muted) setIsMutedEnterprise(false);
+                  }}
                   className="w-full h-full object-cover bg-black"
                 >
                   Your browser does not support HTML5 video.
                 </video>
+                {isMutedEnterprise && isPlayingEnterprise && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (enterpriseVideoRef.current) enterpriseVideoRef.current.muted = false;
+                      setIsMutedEnterprise(false);
+                    }}
+                    className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full border border-white/25 bg-black/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-black/90"
+                  >
+                    <Volume2 className="h-3.5 w-3.5" /> Tap for sound
+                  </button>
+                )}
               </div>
             </div>
           </div>
