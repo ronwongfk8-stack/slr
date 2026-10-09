@@ -36,6 +36,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [budget, setBudget] = useState('RM 5,000 - RM 10,000 / mo');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [waMessage, setWaMessage] = useState('');
   const [highlightService, setHighlightService] = useState(false);
 
   // Automatically pre-fill and highlight "Primary Service Needed" when a plan is selected from Pricing
@@ -91,6 +92,24 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       source: 'Website Form',
     });
 
+    // Send the enquiry to WhatsApp: open a chat with the details already written out.
+    // (No server needed - the visitor just presses Send in WhatsApp.)
+    const lines = [
+      'Hi Sapotlokal Resources, I would like to make an enquiry.',
+      '',
+      `Name: ${name}`,
+      company ? `Company: ${company}` : '',
+      `Phone: ${phone}`,
+      email ? `Email: ${email}` : '',
+      `Service: ${service}`,
+      budget ? `Budget: ${budget}` : '',
+      message ? `Message: ${message}` : '',
+    ].filter((line, i) => i < 2 || line !== '');
+    const text = lines.join('\n');
+    setWaMessage(text);
+    const waNumber = String(siteConfig.whatsappNumber || '').replace(/\D/g, '');
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+
     setSubmitted(true);
   };
 
@@ -118,7 +137,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             Connect With Sapotlokal Resources
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Schedule a growth diagnostic, request video production rates, or visit our studio in Balakong, Cheras. All form submissions are automatically routed to our active CRM.
+            Schedule a growth diagnostic, request video production rates, or visit our studio in Balakong, Cheras. Fill in the form and your enquiry opens in WhatsApp so we can reply to you directly.
           </p>
         </div>
 
@@ -235,11 +254,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     Submit Strategic Brief
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Direct integration into our CRM lead pipeline with rapid SLA response.
+                    Fill in your details and send them to us on WhatsApp for a fast reply.
                   </p>
                 </div>
                 <div className="text-[11px] font-mono text-amber-400 bg-amber-400/10 px-2 py-1 rounded border border-amber-400/20">
-                  CRM Auto-Sync
+                  WhatsApp
                 </div>
               </div>
 
@@ -249,21 +268,21 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     <CheckCircle className="w-8 h-8" />
                   </div>
                   <h4 className="text-xl font-bold text-white font-display">
-                    Inquiry Logged Into CRM Pipeline!
+                    Your Enquiry Is Ready on WhatsApp!
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong className="text-white">{name}</strong>. Our business development team at Sapotlokal Resources has received your requirements and will reach out within 2 business hours.
+                    Thank you, <strong className="text-white">{name}</strong>. WhatsApp should have opened with your details filled in. Please press <strong className="text-white">Send</strong> in WhatsApp so our team receives your enquiry. If it did not open, tap the green button below.
                   </p>
                   <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                     <a
-                      href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-                        `Hi Sapotlokal Resources, I just submitted an inquiry for ${name} (${company}). Looking forward to speaking!`
+                      href={`https://wa.me/${String(siteConfig.whatsappNumber || '').replace(/\D/g, '')}?text=${encodeURIComponent(
+                        waMessage || `Hi Sapotlokal Resources, I would like to make an enquiry. My name is ${name}.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-2.5 text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl transition-colors"
                     >
-                      Urgent? WhatsApp Us Directly
+                      Open WhatsApp to Send
                     </a>
                     <button
                       onClick={resetForm}
@@ -406,10 +425,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       className="w-full flex items-center justify-center gap-2 py-3.5 text-xs sm:text-sm font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl transition-all shadow-lg shadow-amber-400/20"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Submit Inquiry to Sapotlokal CRM</span>
+                      <span>Send Inquiry via WhatsApp</span>
                     </button>
                     <span className="text-[11px] text-slate-500 block text-center mt-2">
-                      Confidentiality guaranteed. No spam. Direct response by WhatsApp or email.
+                      Your details open in WhatsApp - press Send there to deliver your enquiry. No spam.
                     </span>
                   </div>
                 </form>

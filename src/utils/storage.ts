@@ -420,8 +420,9 @@ export function getSavedPortfolio(): PortfolioItem[] {
         let currentVideo: string | undefined = item.videoUrl || item.mediaUrl;
         let usingCurrentDefault = false;
         if (isReplaceableDefaultVideoUrl(currentVideo) && initialMatch?.videoUrl) {
+          // Only treat as "default changed" when the saved video differs from today's default
+          usingCurrentDefault = currentVideo !== initialMatch.videoUrl;
           currentVideo = initialMatch.videoUrl;
-          usingCurrentDefault = true;
         }
         if (currentVideo?.startsWith('indexeddb:')) {
           if (activeVideoBlobUrls.has(item.id)) {
@@ -445,7 +446,8 @@ export function getSavedPortfolio(): PortfolioItem[] {
                 ? '/videos/ugc_growth_9x16.mp4'
                 : '/videos/commercial_4k_reel_16_9.mp4'))
             : undefined,
-          imageUrl: item.imageUrl || item.posterUrl || (resolvedMediaType === 'image' ? item.mediaUrl : initialMatch?.imageUrl),
+          imageUrl: (usingCurrentDefault && initialMatch?.imageUrl) || item.imageUrl || item.posterUrl || (resolvedMediaType === 'image' ? item.mediaUrl : initialMatch?.imageUrl),
+          posterUrl: usingCurrentDefault && initialMatch ? initialMatch.posterUrl : item.posterUrl,
           images: resolvedImages,
           aspectRatio: (usingCurrentDefault && initialMatch?.aspectRatio) || item.aspectRatio || initialMatch?.aspectRatio || (item.category === 'UGC' ? '9:16' : '16:9'),
         };
