@@ -30,7 +30,7 @@ const fallbackGraphicSlides = [
   '/src/assets/images/showcase_ugc_creator_1790504084326.jpg',
 ];
 
-const DEFAULT_LANDSCAPE_FALLBACK = '/videos/commercial_4k_reel_16_9.mp4';
+const DEFAULT_LANDSCAPE_FALLBACK = '/videos/tab_video_editing.mp4';
 
 const PortfolioVideoThumbnail: React.FC<{
   videoUrl?: string;

@@ -3,7 +3,7 @@ import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { PortfolioItem } from '../types';
 import { resolveLiveVideoUrl } from '../utils/storage';
 
-export const FALLBACK_VERTICAL_MP4 = '/videos/ugc_growth_9x16.mp4';
+export const FALLBACK_VERTICAL_MP4 = '/videos/tab_ugc.mp4';
 export const FALLBACK_UGC_POSTER = '/src/assets/images/showcase_ugc_creator_1790504084326.jpg';
 
 interface MobilePhoneFrameProps {

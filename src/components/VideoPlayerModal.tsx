@@ -33,8 +33,8 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ item, onClos
       return raw;
     }
     return item?.category === 'UGC' || item?.aspectRatio === '9:16'
-      ? '/videos/ugc_growth_9x16.mp4'
-      : '/videos/commercial_4k_reel_16_9.mp4';
+      ? '/videos/tab_ugc.mp4'
+      : '/videos/tab_video_editing.mp4';
   };
 
   const [resolvedSource, setResolvedSource] = useState<string>(getInitialVideoUrl);
@@ -123,8 +123,8 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ item, onClos
 
   const handlePlaySampleVideo = () => {
     const fallback = item.category === 'UGC' || item.aspectRatio === '9:16'
-      ? '/videos/ugc_growth_9x16.mp4'
-      : '/videos/commercial_4k_reel_16_9.mp4';
+      ? '/videos/tab_ugc.mp4'
+      : '/videos/tab_video_editing.mp4';
     setResolvedSource(fallback);
     setHasError(false);
     setIsLoading(true);
@@ -268,8 +268,8 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ item, onClos
                 onError={() => {
                   console.warn('Video playback encountered an issue:', videoSource);
                   const fallback = item.category === 'UGC' || item.aspectRatio === '9:16'
-                    ? '/videos/ugc_growth_9x16.mp4'
-                    : '/videos/commercial_4k_reel_16_9.mp4';
+                    ? '/videos/tab_ugc.mp4'
+                    : '/videos/tab_video_editing.mp4';
                   if (videoSource !== fallback) {
                     setResolvedSource(fallback);
                     setHasError(false);

@@ -76,7 +76,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
         return liveUrl;
       }
     } catch {}
-    return '/videos/video_editing_perfume.mp4';
+    return '/videos/tab_ugc.mp4';
   }
 
   // 5. Services Video resolution
@@ -89,7 +89,7 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
         return liveUrl;
       }
     } catch {}
-    return '/videos/services_overview.mp4';
+    return '/videos/hero_talking_head.mp4';
   }
 
   // 6. Query IndexedDB for custom uploaded video by itemId
@@ -143,10 +143,10 @@ export async function resolveLiveVideoUrl(itemId?: string, currentUrl?: string):
 
   // 10. Guaranteed reliable direct CORS-enabled HTTPS fallback stream
   return itemId === 'proj-4' || currentUrl?.includes('916') || currentUrl?.includes('ugc')
-    ? '/videos/ugc_petshop.mp4'
+    ? '/videos/tab_ugc.mp4'
     : itemId === 'proj-6'
-      ? '/videos/brand_strategy.mp4'
-      : '/videos/commercial_4k_reel_16_9.mp4';
+      ? '/videos/tab_graphic_design.mp4'
+      : '/videos/tab_video_editing.mp4';
 }
 
 export function getSavedSiteConfig(): SiteConfig {
@@ -443,8 +443,8 @@ export function getSavedPortfolio(): PortfolioItem[] {
           mediaUrl: usingCurrentDefault && initialMatch ? initialMatch.mediaUrl : item.mediaUrl,
           videoUrl: resolvedMediaType === 'video'
             ? (currentVideo || initialMatch?.videoUrl || (item.category === 'UGC' || item.aspectRatio === '9:16'
-                ? '/videos/ugc_growth_9x16.mp4'
-                : '/videos/commercial_4k_reel_16_9.mp4'))
+                ? '/videos/tab_ugc.mp4'
+                : '/videos/tab_video_editing.mp4'))
             : undefined,
           imageUrl: (usingCurrentDefault && initialMatch?.imageUrl) || item.imageUrl || item.posterUrl || (resolvedMediaType === 'image' ? item.mediaUrl : initialMatch?.imageUrl),
           posterUrl: usingCurrentDefault && initialMatch ? initialMatch.posterUrl : item.posterUrl,

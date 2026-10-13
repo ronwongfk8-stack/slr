@@ -181,7 +181,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
     if (presetType === 'sapotlokal') {
       const presetConfig: SiteConfig = {
         ...configForm,
-        heroVideoUrl: 'https://cdn.jsdelivr.net/gh/bower-media-samples/big-buck-bunny-480p-30s@master/video.mp4',
+        heroVideoUrl: '/videos/tab_video_editing.mp4',
         heroVideoPoster: '/src/assets/images/hero_sapotlokal_agency_1790504057787.jpg',
         heroVideoTitle: 'Sapotlokal Overview & Strategic Advisory Showreel',
         heroVideoDuration: '1:30',
@@ -193,7 +193,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
     } else {
       const presetConfig: SiteConfig = {
         ...configForm,
-        heroVideoUrl: 'https://cdn.jsdelivr.net/gh/themarcosdev/tiktok-app-frontEnd-clone-simple@master/video01.mp4',
+        heroVideoUrl: '/videos/tab_ugc.mp4',
         heroVideoPoster: '/src/assets/images/showcase_ugc_creator_1790504084326.jpg',
         heroVideoTitle: 'Enterprise Growth Architecture & Corporate Advisory',
         heroVideoDuration: '1:15',
@@ -251,7 +251,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
     if (presetType === 'consultancy') {
       const presetConfig: SiteConfig = {
         ...configForm,
-        servicesVideoUrl: 'https://cdn.jsdelivr.net/gh/mediaelement/mediaelement-files@master/echo-hereweare.mp4',
+        servicesVideoUrl: '/videos/hero_talking_head.mp4',
         servicesVideoTitle: 'Specialized Corporate Consultancy & Media Production Overview',
         servicesVideoBadge: 'Consultancy & Production Reel (1:45)',
       };
@@ -261,7 +261,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
     } else {
       const presetConfig: SiteConfig = {
         ...configForm,
-        servicesVideoUrl: 'https://cdn.jsdelivr.net/gh/bower-media-samples/big-buck-bunny-480p-30s@master/video.mp4',
+        servicesVideoUrl: '/videos/tab_video_editing.mp4',
         servicesVideoTitle: 'Kinetic 4K Commercial Reel & Motion Post-Production',
         servicesVideoBadge: 'Commercial Motion (1:30)',
       };
@@ -317,7 +317,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
 
   const handleSetIntro916VideoPreset = (presetType: 'ugc' | 'creative') => {
     setIntro916VideoMeta(null);
-    const videoUrl = 'https://cdn.jsdelivr.net/gh/themarcosdev/tiktok-app-frontEnd-clone-simple@master/video01.mp4';
+    const videoUrl = '/videos/tab_ugc.mp4';
     const updated = {
       ...configForm,
       intro916VideoUrl: videoUrl,
@@ -475,7 +475,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
 
   // Quick Preset Handlers
   const handleSelectVerticalUGCPreset = () => {
-    const verticalMp4 = 'https://cdn.jsdelivr.net/gh/themarcosdev/tiktok-app-frontEnd-clone-simple@master/video01.mp4';
+    const verticalMp4 = '/videos/tab_ugc.mp4';
     const poster = '/src/assets/images/showcase_ugc_creator_1790504084326.jpg';
     setEditingItem((prev) => ({
       ...prev,
@@ -499,7 +499,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
   };
 
   const handleSelect4KCommercialPreset = () => {
-    const horizontalMp4 = 'https://cdn.jsdelivr.net/gh/bower-media-samples/big-buck-bunny-480p-30s@master/video.mp4';
+    const horizontalMp4 = '/videos/tab_video_editing.mp4';
     const poster = '/src/assets/images/showcase_video_production_1790504071320.jpg';
     setEditingItem((prev) => ({
       ...prev,
@@ -747,10 +747,10 @@ export const CMSModal: React.FC<CMSModalProps> = ({
 
     // Provide a reliable fallback video only if video format is active and no video was uploaded
     const fallbackVideo = category === 'UGC' || defaultAspectRatio === '9:16'
-      ? 'https://cdn.jsdelivr.net/gh/themarcosdev/tiktok-app-frontEnd-clone-simple@master/video01.mp4'
+      ? '/videos/tab_ugc.mp4'
       : (category === 'Branding Strategy'
-          ? 'https://cdn.jsdelivr.net/gh/mediaelement/mediaelement-files@master/echo-hereweare.mp4'
-          : 'https://cdn.jsdelivr.net/gh/bower-media-samples/big-buck-bunny-480p-30s@master/video.mp4');
+          ? '/videos/hero_talking_head.mp4'
+          : '/videos/tab_video_editing.mp4');
       
     const computedVideoUrl = isVideo ? (resolvedVideoUrl || fallbackVideo) : undefined;
     const computedWebsiteUrl = isWebsite
@@ -1395,7 +1395,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                         <div className="relative w-[190px] aspect-[9/16] rounded-2xl overflow-hidden border-2 border-amber-400/80 bg-black shadow-2xl group">
                           <video
                             ref={intro916VideoRef}
-                            src={configForm.intro916VideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4'}
+                            src={configForm.intro916VideoUrl || '/videos/tab_graphic_design.mp4'}
                             poster={configForm.intro916VideoPoster?.trim() || undefined}
                             controls
                             muted
@@ -1522,7 +1522,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                               setHeroVideoMeta(null);
                               const updated = {
                                 ...configForm,
-                                heroVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                                heroVideoUrl: '/videos/tab_graphic_design.mp4',
                               };
                               setConfigForm(updated);
                               onSaveSiteConfig(updated);
@@ -1704,7 +1704,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                             />
                           ) : (
                             <video
-                              src={configForm.heroVideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'}
+                              src={configForm.heroVideoUrl || '/videos/tab_graphic_design.mp4'}
                               preload="metadata"
                               muted
                               playsInline
@@ -1743,7 +1743,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                         <div className="relative w-full h-full bg-black">
                           <video
                             ref={heroVideoRef}
-                            src={configForm.heroVideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'}
+                            src={configForm.heroVideoUrl || '/videos/tab_graphic_design.mp4'}
                             poster={configForm.heroVideoPoster?.trim() || undefined}
                             preload="metadata"
                             controls
@@ -1889,7 +1889,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                               const updated = {
                                 ...configForm,
                                 servicesVideoUrl:
-                                  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+                                  '/videos/tab_graphic_design.mp4',
                               };
                               setConfigForm(updated);
                               onSaveSiteConfig(updated);
@@ -1986,7 +1986,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                           <video
                             src={
                               configForm.servicesVideoUrl ||
-                              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4'
+                              '/videos/tab_graphic_design.mp4'
                             }
                             preload="metadata"
                             muted
@@ -2028,7 +2028,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                             ref={servicesVideoRef}
                             src={
                               configForm.servicesVideoUrl ||
-                              'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4'
+                              '/videos/tab_graphic_design.mp4'
                             }
                             preload="metadata"
                             controls
@@ -2509,7 +2509,7 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                                   handleAddVideoUrl();
                                 }
                               }}
-                              placeholder="https://commondatastorage.googleapis.com/.../ForBiggerBlazes.mp4"
+                              placeholder="/videos/tab_graphic_design.mp4"
                               className="flex-1 px-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white font-mono placeholder-slate-500 focus:outline-none focus:border-amber-400"
                             />
                             <button
@@ -2527,21 +2527,21 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                             <span className="text-slate-400 font-mono text-[10px]">Guaranteed 4K video streams:</span>
                             <button
                               type="button"
-                              onClick={() => handleAddVideoUrl('https://cdn.jsdelivr.net/gh/bower-media-samples/big-buck-bunny-480p-30s@master/video.mp4')}
+                              onClick={() => handleAddVideoUrl('/videos/tab_video_editing.mp4')}
                               className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-amber-300 border border-slate-700 hover:border-amber-400/50 cursor-pointer transition-colors text-[10px] font-semibold"
                             >
                               🎬 4K Commercial Reel
                             </button>
                             <button
                               type="button"
-                              onClick={() => handleAddVideoUrl('https://cdn.jsdelivr.net/gh/themarcosdev/tiktok-app-frontEnd-clone-simple@master/video01.mp4')}
+                              onClick={() => handleAddVideoUrl('/videos/tab_ugc.mp4')}
                               className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-slate-700 hover:border-emerald-400/50 cursor-pointer transition-colors text-[10px] font-semibold"
                             >
                               📱 9:16 Vertical UGC
                             </button>
                             <button
                               type="button"
-                              onClick={() => handleAddVideoUrl('https://cdn.jsdelivr.net/gh/mediaelement/mediaelement-files@master/echo-hereweare.mp4')}
+                              onClick={() => handleAddVideoUrl('/videos/hero_talking_head.mp4')}
                               className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 cursor-pointer transition-colors text-[10px] font-semibold"
                             >
                               📈 Business Showreel
@@ -2688,8 +2688,8 @@ export const CMSModal: React.FC<CMSModalProps> = ({
                               const playablePreview = (rawVideo && !rawVideo.startsWith('indexeddb:'))
                                 ? rawVideo
                                 : (editingItem.category === 'UGC'
-                                    ? '/videos/ugc_creator_reel_9_16.mp4'
-                                    : '/videos/commercial_4k_reel_16_9.mp4');
+                                    ? '/videos/tab_ugc.mp4'
+                                    : '/videos/tab_video_editing.mp4');
 
                               return editingItem.aspectRatio === '9:16' ? (
                                 <div className="max-w-[255px] mx-auto aspect-[9/16] bg-black rounded-2xl border-2 border-slate-700 overflow-hidden shadow-lg flex flex-col justify-between p-1.5">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   getSavedSiteConfig, 
   saveSiteConfig, 
@@ -12,18 +12,14 @@ import {
   hydratePortfolioWithMedia,
   isFilteredOutItem
 } from './utils/storage';
-import { SiteConfig, PortfolioItem, Lead, ClientReport } from './types';
+import { SiteConfig, PortfolioItem, Lead, ClientReport, ServiceCategory } from './types';
 
-import { Navbar } from './components/Navbar';
+import { StageHeader } from './components/StageHeader';
 import { HeroSection } from './components/HeroSection';
-import { ServicesSection } from './components/ServicesSection';
-import { PortfolioSection } from './components/PortfolioSection';
-import { PricingSection } from './components/PricingSection';
-import { FAQSection } from './components/FAQSection';
-import { CRMSection } from './components/CRMSection';
-import { AboutSection } from './components/AboutSection';
-import { ContactSection } from './components/ContactSection';
-import { Footer } from './components/Footer';
+import { IntroShowreel, shouldShowIntro } from './components/IntroShowreel';
+import { PetalMenu } from './components/PetalMenu';
+import { TabStage } from './components/TabStage';
+import { TabId, getTab } from './data/experienceTabs';
 
 import { QRCodeModal } from './components/QRCodeModal';
 import { VideoPlayerModal } from './components/VideoPlayerModal';
@@ -37,6 +33,15 @@ export default function App() {
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>(() => 
     getSavedPortfolio().filter((p) => !isFilteredOutItem(p))
   );
+  // Cinematic full-screen intro showreel (plays once per visit)
+  const [showIntro, setShowIntro] = useState<boolean>(() => shouldShowIntro());
+  const [introEnding, setIntroEnding] = useState(false);
+  // Stage flow: intro -> talking head -> pop-up menu -> selected content
+  const [activeTab, setActiveTab] = useState<TabId | null>(null);
+  const [menuUnlocked, setMenuUnlocked] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [contactService, setContactService] = useState<ServiceCategory | undefined>(undefined);
+  const autoPoppedRef = useRef(false);
   const [leads, setLeads] = useState<Lead[]>(getSavedLeads());
   const [reports, setReports] = useState<ClientReport[]>(getSavedReports());
 
@@ -144,103 +149,100 @@ export default function App() {
     showToast('Restored all official Sapotlokal defaults.');
   };
 
-  const handleExplorePortfolio = () => {
-    const el = document.getElementById('portfolio');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  const scrollTop = () => window.scrollTo({ top: 0, behavior: 'auto' });
+
+  // Talking head finished -> pop up the menu
+  const handleHeroEnded = () => {
+    autoPoppedRef.current = true;
+    setMenuUnlocked(true);
+    setMenuOpen(true);
+  };
+
+  // Visitor stopped the talking head -> pop up the menu (the first time)
+  const handleHeroUserPause = () => {
+    setMenuUnlocked(true);
+    if (!autoPoppedRef.current) {
+      autoPoppedRef.current = true;
+      setMenuOpen(true);
     }
   };
 
-  const handleOpenHeroVideo = () => {
-    const heroPoster = siteConfig.heroVideoPoster?.trim() || undefined;
-    const heroVideoUrl = siteConfig.heroVideoUrl && !siteConfig.heroVideoUrl.includes('commondatastorage')
-      ? siteConfig.heroVideoUrl
-      : '/videos/hero_talking_head.mp4';
-    const heroItem: PortfolioItem = {
-      id: 'hero-overview-video',
-      title: siteConfig.heroVideoTitle || 'Sapotlokal Overview & Strategic Advisory Showreel',
-      client: 'Sapotlokal Resources',
-      category: 'Video Editing',
-      description: siteConfig.heroSubheadline || 'Corporate consultancy & media production explanatory overview.',
-      mediaType: 'video',
-      videoUrl: heroVideoUrl,
-      imageUrl: heroPoster,
-      mediaUrl: heroVideoUrl,
-      posterUrl: heroPoster,
-      metrics: siteConfig.heroVideoBadge || 'Agency Introductory Overview (1:30)',
-      tags: ['Agency Overview', 'Corporate Production', 'Consultancy'],
-      aspectRatio: '16:9',
-    };
-    setActiveVideoItem(heroItem);
+  const openMenu = () => {
+    setMenuUnlocked(true);
+    setMenuOpen(true);
+  };
+
+  const selectTab = (id: TabId) => {
+    setMenuOpen(false);
+    setContactService(undefined);
+    setActiveTab(id);
+    scrollTop();
+  };
+
+  const goContact = (service?: ServiceCategory) => {
+    setMenuOpen(false);
+    setContactService(service);
+    setActiveTab('contact');
+    scrollTop();
+  };
+
+  const goHome = () => {
+    setMenuOpen(false);
+    setActiveTab(null);
+    scrollTop();
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-400 selection:text-slate-950">
-      {/* Top Navigation */}
-      <Navbar
-        siteConfig={siteConfig}
-        onOpenQR={() => setIsQRModalOpen(true)}
+    <div className="min-h-screen overflow-x-clip bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-400 selection:text-slate-950">
+      {/* Cinematic intro: covers the whole screen when the site first opens */}
+      {showIntro && (
+        <IntroShowreel onEnding={() => setIntroEnding(true)} onFinish={() => setShowIntro(false)} />
+      )}
+
+      <StageHeader
+        menuUnlocked={menuUnlocked}
+        onHome={goHome}
+        onOpenMenu={openMenu}
+        onContact={() => goContact()}
       />
 
-      {/* Main Content Sections */}
       <main className="flex-1">
-        <HeroSection
-          siteConfig={siteConfig}
-          onOpenQR={() => setIsQRModalOpen(true)}
-          onExplorePortfolio={handleExplorePortfolio}
-          onOpenHeroVideoModal={handleOpenHeroVideo}
-          onSaveSiteConfig={handleSaveConfig}
-        />
+        {/* Talking head (stays mounted so it keeps its place when the visitor goes back) */}
+        <div className={activeTab ? 'hidden' : ''}>
+          <HeroSection
+            siteConfig={siteConfig}
+            startPlayback={!showIntro || introEnding}
+            active={activeTab === null && !menuOpen}
+            menuUnlocked={menuUnlocked}
+            onEnded={handleHeroEnded}
+            onUserPause={handleHeroUserPause}
+            onOpenMenu={openMenu}
+            onSaveSiteConfig={handleSaveConfig}
+          />
+        </div>
 
-        <ServicesSection
-          siteConfig={siteConfig}
-          onSaveSiteConfig={handleSaveConfig}
-        />
-
-        <PortfolioSection
-          items={portfolioItems}
-          onSelectVideo={(item) => setActiveVideoItem(item)}
-          onOpenCMS={handleOpenCMS}
-        />
-
-        <PricingSection
-          whatsappNumber={siteConfig.whatsappNumber}
-          onSelectPlan={(plan) => {
-            setSelectedPlanForBrief(plan);
-            showToast(`Custom quote requested for ${plan}. Review pre-filled brief below!`);
-          }}
-        />
-
-        <FAQSection />
-
-        <CRMSection
-          leads={leads}
-          onUpdateLeads={handleUpdateLeads}
-          onAddLead={handleAddLead}
-        />
-
-        <AboutSection siteConfig={siteConfig} />
-
-        <ContactSection
-          siteConfig={siteConfig}
-          onOpenQR={() => setIsQRModalOpen(true)}
-          onLeadCaptured={handleAddLead}
-          selectedPlan={selectedPlanForBrief}
-        />
+        {/* Selected content: video, CRM demo or WhatsApp form */}
+        {activeTab && (
+          <TabStage
+            tab={getTab(activeTab)}
+            siteConfig={siteConfig}
+            leads={leads}
+            onUpdateLeads={handleUpdateLeads}
+            onAddLead={handleAddLead}
+            contactService={contactService}
+            onSelectTab={selectTab}
+            onOpenMenu={openMenu}
+            onContact={goContact}
+            onOpenQR={() => setIsQRModalOpen(true)}
+          />
+        )}
       </main>
 
-      {/* Footer */}
-      <Footer
-        siteConfig={siteConfig}
-        onOpenQR={() => setIsQRModalOpen(true)}
-        onOpenCMS={handleOpenCMS}
-        isFounderAuthenticated={isFounderAuthenticated}
-        onFounderLogout={handleFounderLogout}
-      />
+      {/* Pop-up menu of the seven options */}
+      <PetalMenu open={menuOpen} activeId={activeTab} onSelect={selectTab} onClose={() => setMenuOpen(false)} />
 
       {/* Persistent Floating Utility Hub */}
-      <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5">
-        {/* Toast popup */}
+      <div className="fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-2.5">
         {toastMessage && (
           <div className="bg-slate-900 border border-amber-400/50 text-amber-300 text-xs px-4 py-2.5 rounded-xl shadow-2xl animate-fade-in flex items-center gap-2 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -249,7 +251,6 @@ export default function App() {
         )}
 
         <div className="flex items-center gap-2 bg-slate-950/90 border border-slate-800 backdrop-blur-md p-1.5 rounded-2xl shadow-2xl">
-          {/* Quick QR code button */}
           <button
             onClick={() => setIsQRModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-200 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all cursor-pointer"
@@ -259,7 +260,6 @@ export default function App() {
             <span className="hidden sm:inline">QR Contact</span>
           </button>
 
-          {/* Subtle concealed settings/gear icon trigger for CMS */}
           <button
             onClick={handleOpenCMS}
             className="p-2 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-900 transition-colors cursor-pointer"

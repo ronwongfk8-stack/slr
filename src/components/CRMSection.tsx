@@ -21,6 +21,8 @@ interface CRMSectionProps {
   leads: Lead[];
   onUpdateLeads: (leads: Lead[]) => void;
   onAddLead: (lead: Omit<Lead, 'id' | 'createdAt'>) => void;
+  /** true when shown inside the stage: no big page header, tighter spacing */
+  embedded?: boolean;
 }
 
 const STAGES: LeadStage[] = [
@@ -36,6 +38,7 @@ export const CRMSection: React.FC<CRMSectionProps> = ({
   leads,
   onUpdateLeads,
   onAddLead,
+  embedded = false,
 }) => {
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban');
   const [searchQuery, setSearchQuery] = useState('');
@@ -139,24 +142,35 @@ export const CRMSection: React.FC<CRMSectionProps> = ({
   };
 
   return (
-    <section id="crm" className="py-24 bg-slate-950 border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="crm"
+      className={embedded ? 'py-2' : 'py-24 bg-slate-950 border-t border-slate-900'}
+    >
+      <div className={embedded ? 'w-full' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-amber-400 mb-2">
               <TrendingUp className="w-4 h-4" />
-              <span>Sapotlokal Integrated CRM Engine</span>
+              <span>{embedded ? 'Live CRM demo' : 'Sapotlokal Integrated CRM Engine'}</span>
             </div>
-            <h2
-              className="text-3xl sm:text-5xl font-extrabold font-display tracking-tight text-white"
-              style={{ textWrap: 'balance' }}
-            >
-              Client Lead Tracking & Pipeline Management
-            </h2>
-            <p className="text-sm text-slate-300 mt-3 leading-relaxed">
-              Every prospective inquiry captured from website forms, WhatsApp links, and QR scans feeds directly into this live CRM. Track conversion velocity, lead intent scores, and 1-click WhatsApp follow-ups.
-            </p>
+            {embedded ? (
+              <p className="text-sm text-slate-300 leading-relaxed">
+                A working demo of the kind of CRM we can build for your business. Add a lead, move it across the pipeline and export it.
+              </p>
+            ) : (
+              <>
+                <h2
+                  className="text-3xl sm:text-5xl font-extrabold font-display tracking-tight text-white"
+                  style={{ textWrap: 'balance' }}
+                >
+                  Client Lead Tracking & Pipeline Management
+                </h2>
+                <p className="text-sm text-slate-300 mt-3 leading-relaxed">
+                  Every prospective inquiry captured from website forms, WhatsApp links, and QR scans feeds directly into this live CRM. Track conversion velocity, lead intent scores, and 1-click WhatsApp follow-ups.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Action buttons */}
@@ -260,14 +274,20 @@ export const CRMSection: React.FC<CRMSectionProps> = ({
 
         {/* KANBAN VIEW */}
         {viewMode === 'kanban' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 overflow-x-auto pb-4">
+          <div
+            className={
+              embedded
+                ? 'flex gap-4 overflow-x-auto pb-4 snap-x'
+                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 overflow-x-auto pb-4'
+            }
+          >
             {STAGES.map((stage) => {
               const stageLeads = filteredLeads.filter((l) => l.stage === stage);
 
               return (
                 <div
                   key={stage}
-                  className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3 flex flex-col min-w-[220px]"
+                  className={`bg-slate-950/70 border border-slate-800/80 rounded-xl p-3 flex flex-col min-w-[220px] ${embedded ? 'w-[270px] flex-shrink-0 snap-start' : ''}`}
                 >
                   {/* Column Header */}
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">

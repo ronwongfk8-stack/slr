@@ -19,6 +19,10 @@ interface ContactSectionProps {
   onOpenQR: () => void;
   onLeadCaptured: (lead: Omit<Lead, 'id' | 'createdAt'>) => void;
   selectedPlan?: string | null;
+  /** true when shown inside the stage: just the WhatsApp form, no page header or address cards */
+  compact?: boolean;
+  /** pre-selects the service (e.g. from the video the visitor just watched) */
+  prefillService?: ServiceCategory;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
@@ -26,6 +30,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   onOpenQR,
   onLeadCaptured,
   selectedPlan,
+  compact = false,
+  prefillService,
 }) => {
   // Form State
   const [name, setName] = useState('');
@@ -38,6 +44,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [submitted, setSubmitted] = useState(false);
   const [waMessage, setWaMessage] = useState('');
   const [highlightService, setHighlightService] = useState(false);
+
+  // Pre-select the service the visitor just watched
+  useEffect(() => {
+    if (prefillService) setService(prefillService);
+  }, [prefillService]);
 
   // Automatically pre-fill and highlight "Primary Service Needed" when a plan is selected from Pricing
   useEffect(() => {
@@ -123,10 +134,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section id="contact" className="py-24 bg-slate-900/50 border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      className={compact ? 'py-2' : 'py-24 bg-slate-900/50 border-t border-slate-900'}
+    >
+      <div className={compact ? 'w-full' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}>
         {/* Section Header */}
-        <div className="max-w-3xl mb-16">
+        <div className={compact ? 'hidden' : 'max-w-3xl mb-16'}>
           <div className="text-xs font-semibold tracking-wider uppercase text-amber-400 mb-2">
             Initiate Corporate Engagement
           </div>
@@ -143,7 +157,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Contact Cards & Office Details */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className={compact ? 'hidden' : 'lg:col-span-5 space-y-6'}>
             {/* Primary Details Card */}
             <div className="p-6 sm:p-7 bg-slate-950 border border-slate-800 rounded-2xl space-y-6">
               <h3 className="text-lg font-bold font-display text-white">
@@ -246,7 +260,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </div>
 
           {/* Right Column: Lead Capture Form */}
-          <div className="lg:col-span-7">
+          <div className={compact ? 'lg:col-span-12 w-full max-w-2xl mx-auto' : 'lg:col-span-7'}>
             <div className="p-6 sm:p-8 bg-slate-950 border border-slate-800 rounded-2xl relative overflow-hidden">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/80">
                 <div>
