@@ -4,6 +4,7 @@ import {
   Play,
   Smartphone,
   Palette,
+  Gem,
   UserRound,
   Clapperboard,
   Presentation,
@@ -17,6 +18,7 @@ import { EXPERIENCE_TABS, ExperienceTab, TabId } from '../data/experienceTabs';
 export const TAB_ICONS: Record<TabId, React.ComponentType<{ className?: string }>> = {
   ugc: Smartphone,
   graphic: Palette,
+  branding: Gem,
   presenter: UserRound,
   editing: Clapperboard,
   pointaken: Presentation,
@@ -58,7 +60,7 @@ const Petal: React.FC<{
       aria-label={`${tab.label}: ${tab.title}`}
       className={`sp-anim group relative flex min-h-[8.5rem] w-full overflow-hidden text-left shadow-xl shadow-black/40 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400 sm:min-h-[12rem] ${radius} ${
         isContact ? 'text-white' : 'bg-gradient-to-br from-white to-slate-200 text-slate-800'
-      } ${active ? 'ring-4 ring-amber-400' : ''} ${isContact ? 'lg:col-span-2 xl:col-span-1' : ''}`}
+      } ${active ? 'ring-4 ring-amber-400' : ''} ${isContact ? 'sm:col-span-2 lg:col-span-1 xl:col-span-4 xl:min-h-[8.5rem]' : ''}`}
       style={{
         animation: `sp-pop 560ms cubic-bezier(.2,.9,.3,1.1) both`,
         animationDelay: `${120 + index * 90}ms`,

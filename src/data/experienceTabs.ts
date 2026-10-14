@@ -4,7 +4,7 @@ import { ServiceCategory } from '../types';
  * The seven selectable options shown in the pop-up menu.
  * To change a button's wording or its video, edit it here (video files live in /public/videos/).
  */
-export type TabId = 'ugc' | 'graphic' | 'presenter' | 'editing' | 'pointaken' | 'powerpoint' | 'crm' | 'contact';
+export type TabId = 'ugc' | 'graphic' | 'branding' | 'presenter' | 'editing' | 'pointaken' | 'powerpoint' | 'crm' | 'contact';
 export type TabKind = 'video' | 'crm' | 'contact';
 
 export interface ExperienceTab {
@@ -57,8 +57,21 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
     action: 'Watch designs',
   },
   {
-    id: 'presenter',
+    id: 'branding',
     letter: 'C',
+    label: 'Branding',
+    title: 'Brand Identity & Storytelling — Visuals That Make Your Brand Unforgettable',
+    blurb: 'Logos, look and feel, and a story people remember.',
+    kind: 'video',
+    videoSrc: '/videos/tab_branding.mp4',
+    ratio: 16 / 9,
+    service: 'Branding Strategy',
+    color: '#B8860B',
+    action: 'Watch showcase',
+  },
+  {
+    id: 'presenter',
+    letter: 'D',
     label: 'Model Presenter',
     title: 'AI Model Presenters — On-Camera Spokespeople for Your Brand',
     blurb: 'A friendly face that presents your product on camera.',
@@ -71,7 +84,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'editing',
-    letter: 'D',
+    letter: 'E',
     label: 'Video Editing',
     title: 'Cinematic Video Editing — From Raw Footage to Polished Story',
     blurb: 'Pacing, colour and sound that keep viewers watching.',
@@ -84,7 +97,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'pointaken',
-    letter: 'E',
+    letter: 'F',
     label: 'Pointaken Presentation',
     title: 'Pointaken Presentation Studio — Markdown Decks for Modern Creators',
     blurb: 'Write your thoughts, get a gorgeous deck instantly.',
@@ -97,7 +110,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'powerpoint',
-    letter: 'F',
+    letter: 'G',
     label: 'PowerPoint',
     title: 'PowerPoint Presentation Design — Pitch Decks, Templates & Animated Slides',
     blurb: 'Professional decks that look polished and tell your story.',
@@ -110,7 +123,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'crm',
-    letter: 'G',
+    letter: 'H',
     label: 'CRM',
     title: 'Custom CRM Dashboard — Capture, Track & Close Your Leads',
     blurb: 'Try a working demo of a CRM built for your business.',
@@ -121,7 +134,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'contact',
-    letter: 'H',
+    letter: 'I',
     label: 'Contact',
     title: 'Tell Us About Your Project — Reply Comes Straight to WhatsApp',
     blurb: 'Fill in a short form and send it to us on WhatsApp.',
