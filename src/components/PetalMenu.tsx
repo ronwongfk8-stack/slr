@@ -5,6 +5,8 @@ import {
   Smartphone,
   Palette,
   Gem,
+  Leaf,
+  ExternalLink,
   UserRound,
   Clapperboard,
   Presentation,
@@ -23,6 +25,7 @@ export const TAB_ICONS: Record<TabId, React.ComponentType<{ className?: string }
   editing: Clapperboard,
   pointaken: Presentation,
   powerpoint: MonitorPlay,
+  sme: Leaf,
   crm: LayoutDashboard,
   contact: MessageCircle,
 };
@@ -60,7 +63,7 @@ const Petal: React.FC<{
       aria-label={`${tab.label}: ${tab.title}`}
       className={`sp-anim group relative flex min-h-[8.5rem] w-full overflow-hidden text-left shadow-xl shadow-black/40 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400 sm:min-h-[12rem] ${radius} ${
         isContact ? 'text-white' : 'bg-gradient-to-br from-white to-slate-200 text-slate-800'
-      } ${active ? 'ring-4 ring-amber-400' : ''} ${isContact ? 'sm:col-span-2 lg:col-span-1 xl:col-span-4 xl:min-h-[8.5rem]' : ''}`}
+      } ${active ? 'ring-4 ring-amber-400' : ''} ${isContact ? 'sm:col-span-2 lg:col-span-3 xl:min-h-[8.5rem]' : ''} ${tab.id === 'crm' ? 'sm:col-span-2 lg:col-span-1' : ''}`}
       style={{
         animation: `sp-pop 560ms cubic-bezier(.2,.9,.3,1.1) both`,
         animationDelay: `${120 + index * 90}ms`,
@@ -107,7 +110,13 @@ const Petal: React.FC<{
             className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white transition-all group-hover:gap-2.5"
             style={{ background: isContact ? 'rgba(0,0,0,0.3)' : tab.color }}
           >
-            {tab.kind === 'video' ? <Play className="h-3 w-3 fill-white" /> : <ArrowRight className="h-3 w-3" />}
+            {tab.kind === 'video' ? (
+              <Play className="h-3 w-3 fill-white" />
+            ) : tab.kind === 'link' ? (
+              <ExternalLink className="h-3 w-3" />
+            ) : (
+              <ArrowRight className="h-3 w-3" />
+            )}
             {tab.action}
           </span>
         </span>

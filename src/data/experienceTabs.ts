@@ -4,8 +4,8 @@ import { ServiceCategory } from '../types';
  * The seven selectable options shown in the pop-up menu.
  * To change a button's wording or its video, edit it here (video files live in /public/videos/).
  */
-export type TabId = 'ugc' | 'graphic' | 'branding' | 'presenter' | 'editing' | 'pointaken' | 'powerpoint' | 'crm' | 'contact';
-export type TabKind = 'video' | 'crm' | 'contact';
+export type TabId = 'ugc' | 'graphic' | 'branding' | 'presenter' | 'editing' | 'pointaken' | 'powerpoint' | 'sme' | 'crm' | 'contact';
+export type TabKind = 'video' | 'crm' | 'contact' | 'link' | 'page';
 
 export interface ExperienceTab {
   id: TabId;
@@ -17,6 +17,8 @@ export interface ExperienceTab {
   /** one short line of support text on the button */
   blurb: string;
   kind: TabKind;
+  /** web address for link tabs (opens in a new tab) */
+  href?: string;
   /** video file for video tabs */
   videoSrc?: string;
   /** width / height of the video, so the player is the right shape before it loads */
@@ -122,8 +124,19 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
     action: 'Watch demo',
   },
   {
-    id: 'crm',
+    id: 'sme',
     letter: 'H',
+    label: 'SME Reports',
+    title: 'Clearer Data. Smarter Costs. — Practical Sustainability & Cost Reporting for Malaysian SMEs',
+    blurb: 'Turn utility bills and spreadsheets into useful reports.',
+    kind: 'page',
+    service: 'Branding Strategy',
+    color: '#2F7D3A',
+    action: 'Open page',
+  },
+  {
+    id: 'crm',
+    letter: 'I',
     label: 'CRM',
     title: 'Custom CRM Dashboard — Capture, Track & Close Your Leads',
     blurb: 'Try a working demo of a CRM built for your business.',
@@ -134,7 +147,7 @@ export const EXPERIENCE_TABS: ExperienceTab[] = [
   },
   {
     id: 'contact',
-    letter: 'I',
+    letter: 'J',
     label: 'Contact',
     title: 'Tell Us About Your Project — Reply Comes Straight to WhatsApp',
     blurb: 'Fill in a short form and send it to us on WhatsApp.',

@@ -1,8 +1,9 @@
 import React from 'react';
-import { LayoutGrid, MessageCircle, ArrowRight } from 'lucide-react';
+import { LayoutGrid, MessageCircle, ArrowRight, ExternalLink } from 'lucide-react';
 import { StagePlayer } from './StagePlayer';
 import { CRMSection } from './CRMSection';
 import { ContactSection } from './ContactSection';
+import { SmeReportingPage } from './SmeReportingPage';
 import { TAB_ICONS } from './PetalMenu';
 import { EXPERIENCE_TABS, ExperienceTab, TabId } from '../data/experienceTabs';
 import { Lead, ServiceCategory, SiteConfig } from '../types';
@@ -86,8 +87,12 @@ export const TabStage: React.FC<TabStageProps> = ({
         })}
       </nav>
 
-      {/* title */}
-      <div key={tab.id} className="sp-anim mb-6 flex items-start gap-4" style={{ animation: 'sp-rise 500ms ease both' }}>
+      {/* title (the SME page has its own headline) */}
+      <div
+        key={tab.id}
+        className={`sp-anim mb-6 flex items-start gap-4 ${tab.kind === 'page' ? 'hidden' : ''}`}
+        style={{ animation: 'sp-rise 500ms ease both' }}
+      >
         <span
           className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-tl-2xl rounded-br-2xl rounded-bl-md rounded-tr-md text-white shadow-lg"
           style={{ background: tab.color }}
@@ -143,6 +148,35 @@ export const TabStage: React.FC<TabStageProps> = ({
               </div>
             )}
           />
+        )}
+
+        {tab.kind === 'page' && <SmeReportingPage siteConfig={siteConfig} onContact={onContact} />}
+
+        {tab.kind === 'link' && tab.href && (
+          <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-slate-900/70 p-6 text-center shadow-2xl sm:p-10">
+            <span
+              className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-tl-3xl rounded-br-3xl rounded-bl-lg rounded-tr-lg text-white shadow-lg"
+              style={{ background: tab.color }}
+            >
+              <Icon className="h-8 w-8" />
+            </span>
+            <p className="font-display text-xl font-extrabold text-white sm:text-2xl">{tab.label}</p>
+            <p className="mx-auto mb-6 mt-2 max-w-md text-sm text-slate-300">{tab.blurb}</p>
+            <a
+              href={tab.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:scale-[1.02] sm:w-auto sm:text-base"
+              style={{ background: tab.color }}
+            >
+              Open our MadeThis profile
+              <ExternalLink className="h-4 w-4" />
+            </a>
+            <p className="mt-3 text-[11px] uppercase tracking-[0.2em] text-slate-500">Opens in a new tab</p>
+            <div className="mx-auto mt-7 max-w-sm border-t border-white/10 pt-6">
+              <ContactButton large onClick={() => onContact(tab.service)} />
+            </div>
+          </div>
         )}
 
         {tab.kind === 'crm' && (
