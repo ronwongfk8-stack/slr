@@ -77,24 +77,34 @@ const RECORDS = [
   { id: 'costs', label: 'A spreadsheet that tracks your costs' },
 ];
 
+/**
+ * Founding-client offer: the first few SME clients get a discount in return for an honest testimonial.
+ * Set open to false to hide it once the places are taken. Keep the numbers true: change them here
+ * whenever they change, and never show a places-left counter you cannot back up.
+ */
+const FOUNDING = { open: true, places: 5, discount: 20 };
+
 const PRICING = [
   {
     name: 'Readiness assessment',
     body: 'Review your records, data gaps and immediate priorities.',
-    price: 'RM500–1,000',
+    detail: 'From RM800 for 3 months of records at one site. RM1,500 for 12 months of records plus one customer questionnaire reviewed.',
+    price: 'RM800–1,500',
     unit: 'One-off',
   },
   {
     name: 'Dashboard setup',
     body: 'Organise your baseline and build a practical reporting view.',
-    price: 'RM1,500–3,000',
+    detail: 'An Excel dashboard for one site from RM2,500. Power BI with several data sources up to RM5,000.',
+    price: 'RM2,500–5,000',
     unit: 'One-off',
   },
   {
     name: 'Ongoing reporting',
     body: 'A monthly management report with practical recommendations.',
-    price: 'RM300–800',
-    unit: 'Monthly',
+    detail: 'The price depends on the number of sites and data sources.',
+    price: 'RM500–1,200',
+    unit: 'Monthly · 6-month minimum',
   },
 ];
 
@@ -117,7 +127,7 @@ const FAQ = [
   },
   {
     q: 'Are the prices fixed?',
-    a: 'The ranges shown are proposed pilot ranges, not confirmed quotes. Final scope and pricing depend on your data and reporting needs. We agree the scope with you first.',
+    a: 'The ranges shown are proposed pilot ranges, not confirmed quotes. Each package states how many sites and months of records it covers, and the final scope and price depend on your data and reporting needs. We agree the scope with you first.',
   },
   {
     q: 'Is there a free official guide I can read?',
@@ -524,6 +534,7 @@ export const SmeReportingPage: React.FC<SmeReportingPageProps> = ({ siteConfig, 
                 <div className="max-w-lg">
                   <h4 className="text-xl font-medium sm:text-2xl">{p.name}</h4>
                   <p className="mt-1.5 text-[15px] text-[#2c352d]">{p.body}</p>
+                  <p className="mt-1 text-[13px] leading-relaxed text-[#3b463c]">{p.detail}</p>
                   <a
                     href={wa(`Hi Sapotlokal Resources, I would like to ask about: ${p.name} (${p.price}, ${p.unit.toLowerCase()}).`)}
                     target="_blank"
@@ -543,6 +554,35 @@ export const SmeReportingPage: React.FC<SmeReportingPageProps> = ({ siteConfig, 
             </Reveal>
           ))}
         </div>
+
+        {FOUNDING.open && (
+          <Reveal className="mt-6">
+            <div className="flex flex-col gap-5 rounded-3xl border border-[#b9d4bb] bg-[#e8f3e9] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+              <div className="max-w-xl">
+                <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: GREEN }}>
+                  Founding client offer
+                </p>
+                <p className="text-xl font-semibold sm:text-2xl">
+                  Our first {FOUNDING.places} SME clients get {FOUNDING.discount}% off any package.
+                </p>
+                <p className="mt-2 text-[14px] leading-relaxed text-[#2c352d]">
+                  In return, we ask for a short, honest testimonial and, only with your approval, permission to show an
+                  anonymised sample report. One package per client. We agree the scope first.
+                </p>
+              </div>
+              <a
+                href={wa(`Hi Sapotlokal Resources, I would like to ask about the founding client offer (${FOUNDING.discount}% off).`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${linkBtn} flex-shrink-0 text-white hover:brightness-110`}
+                style={{ background: GREEN }}
+              >
+                <MessageCircle className="h-5 w-5" />
+                Ask about this offer
+              </a>
+            </div>
+          </Reveal>
+        )}
       </section>
 
       {/* pricing context */}
