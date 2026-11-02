@@ -4,15 +4,13 @@ import { ServiceCategory, SiteConfig } from '../types';
 
 /**
  * "Practical data for Malaysian SMEs": the sustainability & cost reporting service page.
- * Rebuilt from the MadeThis profile screenshots, with the same sections and wording, plus:
+ * Rebuilt from screenshots of the earlier service page, with the same sections and wording, plus:
  * a sticky page menu, a starter checklist that writes a WhatsApp message, a WhatsApp link on every
  * price, and a short FAQ. All wording that is not from the original page is general and makes no
  * promises about regulation, certification or savings.
  *
  * Edit the text, prices and links in the constants below.
  */
-const MADETHIS_URL = 'https://www.madethis.com/business/sapotlokal-resources?tab=overview';
-
 const GREEN = '#2f7d3a';
 
 const DISCLAIMER =
@@ -626,24 +624,15 @@ export const SmeReportingPage: React.FC<SmeReportingPageProps> = ({ siteConfig, 
             <p className="mt-2 text-[15px] leading-relaxed text-[#2c352d]">
               AI-assisted sustainability report drafting for Malaysian SMEs, grounded in your own data.
             </p>
-            <p className="mt-5 text-3xl font-bold">$150</p>
-            <p className="text-xs text-[#3b463c]">Price as listed on MadeThis</p>
+            <p className="mt-5 text-3xl font-bold">RM600</p>
+            <p className="text-xs text-[#3b463c]">One-off. We agree the scope with you first.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href={MADETHIS_URL}
+                href={wa('Hi Sapotlokal Resources, I would like to ask about the SME Sustainability Reporting Starter (RM600).')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${linkBtn} text-white hover:brightness-110`}
                 style={{ background: GREEN }}
-              >
-                View on MadeThis
-                <ExternalLink className="h-4 w-4" />
-              </a>
-              <a
-                href={wa('Hi Sapotlokal Resources, I would like to ask about the SME Sustainability Reporting Starter.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${linkBtn} border border-[#cfd8cf] bg-white hover:bg-[#eef3ee]`}
               >
                 <MessageCircle className="h-4 w-4" />
                 Ask on WhatsApp
